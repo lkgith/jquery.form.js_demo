@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>jquery.form.js上传图片效果演示</title>
+    <script src="./jquery.js"></script>
+    <script src="./jquery.form.js"></script>
+</head>
+<body>
+    <img src="" class="imageContent"/>
+    <form action="./image" method="post" enctype="multipart/form-data"  id="testUpload">
+        <input type="file" name="image" accept="image/*"/>
+    </form>
+    <script>
+        var $input = $('input[name=image]');
+        
+        $input.on('change',function(e){
+            if(window.FileReader){
+                var fr = new FileReader();
+                fr.onloadend = function(ret){
+                    $('.imageContent').attr('src',ret.target.result);
+                    $('.imageContent').width('200px')
+                    $('.imageContent').height('200px')
+                }
+                fr.readAsDataURL($(e.target.files)[0]);
+            }
+            $('#testUpload').ajaxSubmit({
+                type: 'post',
+                dataType: 'json',
+                url: $('#testUpload').attr('action'),
+                success: function (ret) {
+                    alert('上传图片成功!');
+                },
+                error:function(e){
+                    alert('上传图片失败!');
+                }
+            })
+            return false;
+        });
+    </script>
+</body>
+</html>
